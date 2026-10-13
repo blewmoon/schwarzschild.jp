@@ -16,6 +16,32 @@
 body {
   font-family: "DotGothic16";
 }
+
+.content-warning {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.warning[hidden] {
+  display: none;
+}
+
+#site-content[hidden] {
+  display: none;
+}
+
+.content-warning__panel {
+  width: 40%;
+  padding: 10px;
+  border: 1.5px solid;
+  background: white;
+  text-align: center;
+}
 </style>
 
   </head>
@@ -24,19 +50,82 @@ body {
 
 
 <body>
-<div class="container" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
- <div class="row" style="max-width:70%; justify-content: center; align-items: center;" >
- <div class="col-sm-3" style="position:relative;">
-      <img src="https://media.tenor.com/IYX6U6cqdIkAAAAj/transparent-anoko.gif">
+<section class="content-warning" role="dialog" aria-modal="true" aria-labelledby="warning-title" aria-describedby="warning-description">
+  <div class="content-warning__panel">
+    this website is still a massive wip, dont laugh at me
+    <button class="btn" id="enter-site" type="button"> > let me in!
+    
+    </button>
+  </div>
+</section>
+
+<main id="site-content" tabindex="-1" hidden>
+<div class="container" style="display: flex; justify-content: center; align-items: center; height: 100vh; max-width:70%;">
+ <div class="row" style=" justify-content: center; align-items: center;" >
+ <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;flex-direction:column">
+      <img src="https://media1.tenor.com/m/DXS2LuJnz3gAAAAC/magical-chiikawa-anoko.gif" style="width: 80%;">
+      <div class="mt-2" style="border: 1.5px solid;"><iframe width="100%" src="https://rinr.atabook.org/" ></iframe></div>
 </div>
     
 
- <div class="col-sm-6">
-<p style="font-size: 20px;"><b>"Schwarzschild" /ˈʃwɔːtstʃʌɪld/ </b>
+ <div class="col-md-8">
+
+
+<div class="col-md-6"><p style="font-size: 22px;"><b>"Schwarzschild" /ˈʃwɔːtstʃʌɪld/ </b>
 <br><i><span style="color: rgb(121, 121, 121);font-size: 14px;">a German surname meaning "black sign" or "black shield"</i></span></p>
-<p style="font-size: 14px;"">a kirin who was sent to this world after years of protecting the lines between the<i> mortal realm</i> and the <i>afterlife.</i>
-<p style="font-size: 12px;">who am i? what do i do?</p>
-</p>
+<p style="font-size: 14px;"">a kirin who was sent to this world after years of protecting the lines between the<i> mortal realm</i> and the <i>afterlife.</i></div>
+
+
+<div class="row" style=" justify-content: center; align-items: center;">
+ <div class="col-md-7" style="object-fit: contain; justify-content: center; align-items: center;">
+
+<div id="listening" style="border: 1.5px solid; max-width:60%;"">
+<div class="header__inner" style="display: flex; align-items: center; gap: 8px;">
+    <img id="track-image" alt="Album cover" style="width: 48px; height: 48px; object-fit: cover;" hidden>
+      <span id="song">loading...</span>
+</div>
+
+<script type="text/javascript">
+    let user = 'mournn';
+    let url = 'https://lastfm-last-played.biancarosa.com.br/' + user + '/latest-song';
+    let song = document.querySelector('#song');
+    let trackImage = document.querySelector('#track-image');
+    fetch(url)
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error('Could not load the latest track.');
+            }
+            return response.json()
+        }).then(function (json) {
+            let track = json['track'];
+            let imageUrl = track['image'][0]['#text'];
+            song.textContent = track['name'] + ' - ' + track['artist']['#text'];
+            if (imageUrl) {
+                trackImage.src = imageUrl;
+                trackImage.hidden = false;
+            }
+        }).catch(function (error) {
+            console.error(error);
+            song.textContent = 'Unable to load the latest track.';
+        });
+</script>
+
+
+
+</div>
+
+<div class="mt-2" style="border: 1.5px solid; overflow: scroll; max-width:100%;">
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tempor nunc eget nisl consequat, eget posuere lacus venenatis. Nullam at elit nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque molestie viverra felis vitae accumsan. Maecenas eu nisi odio. Nulla facilisi. Aenean et semper felis. Praesent pulvinar elementum turpis et interdum. Sed mi ligula, egestas vel ex in, consequat placerat odio. Donec bibendum, magna sit amet molestie congue, mauris tortor efficitur massa, a facilisis sem ex eget ipsum. 
+</div>
+
+ </div>
+
+  <div class="col-md-5" style="object-fit: contain;">
+  <div>status goes here</div>
+<div>blog goes here</div>
+  </div>
+</div>
+
 </div>
 </div>
 </div>
@@ -47,4 +136,14 @@ body {
 
 
 </div>
+
+ </main>
+<script>
+  document.querySelector('#enter-site').addEventListener('click', function () {
+    document.querySelector('.content-warning').hidden = true;
+    const siteContent = document.querySelector('#site-content');
+    siteContent.hidden = false;
+    siteContent.focus();
+  });
+</script>
 </body>
